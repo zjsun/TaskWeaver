@@ -1,9 +1,9 @@
+import time
 from typing import Any, Generator, List, Optional
 
 from injector import inject
 
 from taskweaver.llm.util import ChatMessageType, format_chat_message
-
 from .base import CompletionService, EmbeddingService, LLMServiceConfig
 
 DEFAULT_STOP_TOKEN: List[str] = ["</s>"]
@@ -52,6 +52,7 @@ class ZhipuAIServiceConfig(LLMServiceConfig):
         self.top_p = self._get_float("top_p", 0.1)
         self.temperature = self._get_float("temperature", 0.1)
         self.seed = self._get_int("seed", 2024)
+        self.throttling = self._get_int("throttling", 0)
 
 
 class ZhipuAIService(CompletionService, EmbeddingService):
@@ -94,6 +95,10 @@ class ZhipuAIService(CompletionService, EmbeddingService):
         top_p = top_p if top_p is not None else self.config.top_p
         stop = stop if stop is not None else self.config.stop_token
         seed = self.config.seed
+
+        # 限流：zhipuai有高频限制
+        if self.config.throttling > 0:
+            time.sleep(self.config.throttling)
 
         try:
             if use_backup_engine:
