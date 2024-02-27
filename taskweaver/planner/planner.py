@@ -209,10 +209,11 @@ class Planner(Role):
 
         if self.config.use_example and len(self.examples) != 0:
             for conv_example in self.examples:
-                conv_example_in_prompt = self.compose_conversation_for_prompt(
-                    conv_example.rounds,
-                )
-                chat_history += conv_example_in_prompt
+                if conv_example.enabled:
+                    conv_example_in_prompt = self.compose_conversation_for_prompt(
+                        conv_example.rounds,
+                    )
+                    chat_history += conv_example_in_prompt
 
         summary = None
         if self.config.prompt_compression and self.round_compressor is not None:
