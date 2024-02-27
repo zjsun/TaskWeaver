@@ -377,7 +377,7 @@ class TaskWeaverRoundUpdater(SessionEventHandlerBase):
             cur_message_display = format_status_message(cur_message_display_len)
 
             click.secho(
-                click.style(cur_message_prefix, fg="white", bg="yellow")
+                click.style(cur_message_prefix, fg="black", bg="yellow")
                 + click.style("▶ ", fg="yellow")
                 + style_line("[")
                 + style_role(role)
@@ -504,7 +504,7 @@ class TaskWeaverChatApp(SessionEventHandlerBase):
             self._assistant_message(result)
 
     def _assistant_message(self, message: str) -> None:
-        click.secho(click.style(" TaskWeaver ", fg="white", bg="yellow"), nl=False)
+        click.secho(click.style(" TaskWeaver ", fg="black", bg="yellow"), nl=False)
         click.secho(click.style(f"▶  {message}", fg="yellow"))
 
 
