@@ -164,9 +164,10 @@ class CodeGenerator(Role):
         if self.examples is None:
             self.examples = self.load_examples()
         for i, example in enumerate(self.examples):
-            chat_history.extend(
-                self.compose_conversation(example.rounds, example.plugins, add_requirements=False),
-            )
+            if example.enabled:
+                chat_history.extend(
+                    self.compose_conversation(example.rounds, example.plugins, add_requirements=False),
+                )
 
         summary = None
         if self.config.prompt_compression:
