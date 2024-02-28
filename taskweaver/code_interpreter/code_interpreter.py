@@ -106,7 +106,7 @@ class CodeInterpreter(Role):
         use_back_up_engine: bool = False,
     ) -> Post:
         post_proxy = self.event_emitter.create_post_proxy("CodeInterpreter")
-        post_proxy.update_status("generating code")
+        post_proxy.update_status("正在生成代码")
         self.generator.reply(
             memory,
             post_proxy,
@@ -154,7 +154,7 @@ class CodeInterpreter(Role):
 
             return post_proxy.end()
 
-        post_proxy.update_status("verifying code")
+        post_proxy.update_status("正在验证代码")
         self.logger.info(f"Code to be verified: {code.content}")
         code_verify_errors = code_snippet_verification(
             code.content,
@@ -196,7 +196,7 @@ class CodeInterpreter(Role):
         elif len(code_verify_errors) == 0:
             update_verification(post_proxy, "CORRECT", "No error is found.")
 
-        post_proxy.update_status("executing code")
+        post_proxy.update_status("正在执行代码")
         self.logger.info(f"Code to be executed: {code.content}")
 
         exec_result = self.executor.execute_code(

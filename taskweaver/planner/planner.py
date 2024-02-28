@@ -252,7 +252,7 @@ class Planner(Role):
 
         post_proxy = self.event_emitter.create_post_proxy("Planner")
 
-        post_proxy.update_status("composing prompt")
+        post_proxy.update_status("正在组装提示语")
         chat_history = self.compose_prompt(rounds, selected_experiences)
 
         def check_post_validity(post: Post):
@@ -270,7 +270,7 @@ class Planner(Role):
                 post.attachment_list[2].type == AttachmentType.current_plan_step
             ), "LLM failed to generate correct attachment type: current_plan_step"
 
-        post_proxy.update_status("calling LLM endpoint")
+        post_proxy.update_status("请求LLM")
         if self.config.skip_planning and rounds[-1].post_list[-1].send_from == "User":
             self.config.dummy_plan["response"][0]["content"] += rounds[-1].post_list[-1].message
             llm_stream = [
@@ -291,7 +291,7 @@ class Planner(Role):
                 try:
                     for c in s:
                         if is_first_chunk:
-                            post_proxy.update_status("receiving LLM response")
+                            post_proxy.update_status("正在接收LLM响应")
                             is_first_chunk = False
                         llm_output.append(c["content"])
                         yield c
