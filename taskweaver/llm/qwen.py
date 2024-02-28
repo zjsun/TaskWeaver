@@ -1,3 +1,4 @@
+import time
 from http import HTTPStatus
 from typing import Any, Generator, List, Optional
 
@@ -35,6 +36,9 @@ class QWenServiceConfig(LLMServiceConfig):
             shared_embedding_model if shared_embedding_model is not None else self.model,
         )
 
+        self.throttling = self._get_int("throttling", 0)
+        self.temperature = self._get_float("temperature", 0)
+
 
 class QWenService(CompletionService, EmbeddingService):
     dashscope = None
@@ -65,6 +69,9 @@ class QWenService(CompletionService, EmbeddingService):
         stop: Optional[List[str]] = None,
         **kwargs: Any,
     ) -> Generator[ChatMessageType, None, None]:
+        if self.config.throttling > 0:
+            time.sleep(self.config.throttling)
+
         response = QWenService.dashscope.Generation.call(
             model=self.config.model,
             messages=messages,
