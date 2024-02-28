@@ -1,0 +1,65 @@
+enabled: true
+rounds:
+  - user_query: 从主题库中的教职工基本信息统计男女教师分别占总人数的百分比，并用饼图展示结果
+    state: created
+    post_list:
+      - message: 从主题库中的教职工基本信息统计男女教师分别占总人数的百分比，并用饼图展示结果
+        send_from: User
+        send_to: Planner
+        attachment_list:
+      - message: 请连接到主题库，并统计教职工基本信息中男女教师分别占总人数的百分比，并用饼图展示结果
+        send_from: Planner
+        send_to: CodeInterpreter
+        attachment_list:
+          - type: init_plan
+            content: |-
+              1. 连接到主题库，获取教职工基本信息表结构信息
+              2. 生成'统计教职工基本信息中男女教师分别占总人数的百分比'对应的SQL语句 <sequentially depends on 1>
+              3. 在主题库中执行该SQL，获取返回结果 <sequentially depends on 2>
+              4. 使用饼图显示上述SQL查询结果 <sequentially depends on 3>
+              5. 将结果返回给用户 <interactively depends on 4>
+          - type: plan
+            content: |-
+              1. 获取关系数据库'主题库'，读取'教职工基本信息'表结构信息
+              2. 生成'统计教职工基本信息中男女教师分别占总人数的百分比'SQL语句
+              3. 在'主题库'上执行上述SQL，并将结果生成饼图
+              4. 将结果返回给用户
+          - type: current_plan_step
+            content: 1. 获取关系数据库"主题库"，读取"教职工基本信息"表结构信息
+      - message: 已为您生成统计SQL以及统计结果饼图
+        send_from: CodeInterpreter
+        send_to: Planner
+        attachment_list:
+      - message: |-
+          已为您生成统计SQL：
+          ```sql
+          select zrs,
+                  nan_rs/zrs * 100 as nan_bl,
+                  nv_rs/zrs * 100 as nv_bl
+          from (
+            select count(*) as zrs,
+                    sum(case when xbdm = 0 then 1 else 0 end) as nan_rs,
+                    sum(case when xbdm = 1 then 1 else 0 end) as nv_rs,
+            from t_jzg_jbxx
+          ) tmp_
+          ```，
+          执行结果：
+          ![](xxx.png)
+        send_from: Planner
+        send_to: User
+        attachment_list:
+          - type: init_plan
+            content: |-
+              1. 连接到主题库，获取教职工基本信息表结构信息
+              2. 生成'统计教职工基本信息中男女教师分别占总人数的百分比'对应的SQL语句 <sequentially depends on 1>
+              3. 在主题库中执行该SQL，获取返回结果 <sequentially depends on 2>
+              4. 使用饼图显示上述SQL查询结果 <sequentially depends on 3>
+              5. 将结果返回给用户 <interactively depends on 4>
+          - type: plan
+            content: |-
+              1. 获取关系数据库'主题库'，读取'教职工基本信息'表结构信息
+              2. 生成'统计教职工基本信息中男女教师分别占总人数的百分比'SQL语句
+              3. 在'主题库'上执行上述SQL，并将结果生成饼图
+              4. 将结果返回给用户
+          - type: current_plan_step
+            content: 5. 将结果返回给用户

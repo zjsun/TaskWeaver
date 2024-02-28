@@ -1,0 +1,41 @@
+enabled: true
+rounds:
+  - user_query: 过程演示
+    state: created
+    post_list:
+      - message: 过程演示
+        send_from: User
+        send_to: Planner
+        attachment_list:
+      - message: 请生成100以内的随机整数
+        send_from: Planner
+        send_to: CodeInterpreter
+        attachment_list:
+          - type: init_plan
+            content: |-
+              1. 生成100以内的随机整数
+              2. 结果显示给用户 <interactively depends on 1>
+          - type: plan
+            content: |-
+              1. 生成100以内的随机整数
+              2. 结果显示给用户
+          - type: current_plan_step
+            content: 1. 生成100以内的随机整数
+      - message: 本次生成的100以内随机整数是：88
+        send_from: CodeInterpreter
+        send_to: Planner
+        attachment_list:
+      - message: 结果是：88
+        send_from: Planner
+        send_to: User
+        attachment_list:
+        - type: init_plan
+          content: |-
+            1. 生成100以内的随机整数
+            2. 结果显示给用户 <interactively depends on 1>
+        - type: plan
+          content: |-
+            1. 生成100以内的随机整数
+            2. 结果显示给用户
+        - type: current_plan_step
+          content: 2. 结果显示给用户
