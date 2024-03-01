@@ -78,7 +78,7 @@ class QWenService(CompletionService, EmbeddingService):
             result_format="message",  # set the result to be "message" format.
             max_tokens=max_tokens,
             top_p=top_p,
-            temperature=temperature,
+            temperature=self.config.temperature,
             stop=stop,
             stream=True,
             incremental_output=True,
@@ -90,7 +90,7 @@ class QWenService(CompletionService, EmbeddingService):
 
             else:
                 raise Exception(
-                    f"QWen API call failed with status code {msg_chunk.status_code} and error message {msg_chunk.code}",
+                    f"QWen API call failed with status code [{msg_chunk.status_code}]{msg_chunk.code} and error message {msg_chunk.message}",
                 )
 
     def get_embeddings(self, strings: List[str]) -> List[List[float]]:

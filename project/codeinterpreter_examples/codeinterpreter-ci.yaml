@@ -1,0 +1,32 @@
+enabled: true
+rounds:
+  - user_query: 教职工基本信息进行查询或统计（如：统计男女教师分别占全体教职工总人数的百分比）
+    state: finished
+    post_list:
+      - message: 统计男女教师分别占全体教职工总人数的百分比
+        send_from: Planner
+        send_to: CodeInterpreter
+        attachment_list: []
+      - message: 统计完成
+        send_from: CodeInterpreter
+        send_to: Planner
+        attachment_list:
+          - type: thought
+            content: "{ROLE_NAME} 将确保先基于[nl_to_sql]插件将用户的查询/统计问题生成SQL，再基于[sql_query]插件执行该SQL获得结果数据"
+          - type: python
+            content: |-
+              # 1. 基于[nl_to_sql]插件将用户问题生成SQL
+              sql = nl_to_sql("统计男女教师分别占全体教职工总人数的百分比")
+
+              # 2. 基于[sql_query]插件执行上述SQL获得结果数据
+              df, description = sql_query(sql)
+              # 结果数据df中含有列信息
+
+          - type: verification
+            content: NONE
+          - type: code_error
+            content: NONE
+          - type: execution_status
+            content: SUCCESS
+          - type: execution_result
+            content: 生成SQL：xxxx 结果数据：xxxx

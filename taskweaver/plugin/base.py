@@ -28,6 +28,16 @@ class Plugin(ABC):
         self.ctx: PluginContext = ctx
         self.config: Dict[str, Any] = config
 
+    def get_config(self, key: str, default: Any = None):
+        """
+        支持优先从env中获取配置
+        :param key: 配置项key
+        :param default: 默认值
+        :return:
+        """
+        value = self.get_env(key)
+        return value if not None else self.config.get(key, default);
+
     @abstractmethod
     def __call__(self, *args: Any, **kwargs: Any) -> Any:
         """

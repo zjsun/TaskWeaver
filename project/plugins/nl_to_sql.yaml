@@ -1,0 +1,27 @@
+name: nl_to_sql
+enabled: true
+required: false
+description: >-
+  根据自然语言提问转换为SQL查询。
+
+examples: |-
+  sql = nl_to_sql("统计男女教师分别占全体教职工总人数的百分比")
+
+parameters:
+  - name: query
+    type: str
+    required: true
+    description: >-
+      用自然语言描述的查询或统计问题
+
+returns:
+  - name: sql
+    type: str
+    description: 生成的查询/统计SQL
+
+configurations:
+  api_type: qwen
+  api_base:
+  api_key:
+  api_version:
+  api_model:

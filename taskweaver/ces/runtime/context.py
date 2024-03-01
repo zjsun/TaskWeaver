@@ -134,6 +134,8 @@ class ExecutorPluginContext(PluginContext):
         name = f"PLUGIN_{plugin_name}_{variable_name}"
         if name in os.environ:
             return os.environ[name]
+        elif name.upper() in os.environ:    # 再用大写找
+            return os.environ[name.upper()]
         raise Exception(
             "Environment variable " + name + " is required to be specified in environment",
         )

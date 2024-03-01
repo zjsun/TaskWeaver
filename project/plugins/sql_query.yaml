@@ -1,0 +1,25 @@
+name: sql_query
+enabled: true
+required: false
+description: >-
+  在数据库中执行SQL并返回查询结果，包含数据和描述。
+
+examples: |-
+  df, description = sql_query("select * from t_jzg_jbxx")
+
+parameters:
+  - name: query
+    type: str
+    required: true
+    description: SQL语句
+
+returns:
+  - name: df
+    type: pandas.DataFrame
+    description: 查询/统计结果数据
+  - name: description
+    type: str
+    description: 结果数据的描述（如：列名、样例数据等）
+
+configurations:
+  db_uri:
